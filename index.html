@@ -54,7 +54,7 @@ input[type=search]::placeholder{color:var(--soft)}
 .cell[aria-current="true"]{border-color:var(--mark);background:var(--panel)}
 .cell[aria-current="true"] .nm{color:var(--mark)}
 .cell .nm{font-family:var(--kai);font-size:.86rem;white-space:nowrap}
-.cell.done .nm::after{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--acc);margin-left:2px;vertical-align:middle}
+
 svg.hx{display:block}
 svg.hx rect{fill:var(--ink)}
 .cell[aria-current="true"] svg.hx rect{fill:var(--mark)}
@@ -137,7 +137,7 @@ details.cm>summary small{color:var(--soft);font-size:.8rem}
   <div class="layout">
     <nav class="side" aria-label="目录">
       <div class="grid" id="grid"></div>
-      <p class="legend"><i></i>带圆点的卦已有白话和两家转述，其余暂时只有原文和苏轼的注。</p>
+      <p class="legend">六十四卦都有原文、白话、苏轼的注和南怀瑾、曾仕强两家的转述。</p>
       <div class="wings" id="wings"></div>
     </nav>
     <main id="main" aria-live="polite"></main>
@@ -149,7 +149,7 @@ details.cm>summary small{color:var(--soft);font-size:.8rem}
       <li><b>经传原文</b>　取自维基文库《周易》各卦页面与《易传》各篇。<a href="https://zh.wikisource.org/wiki/周易" target="_blank" rel="noopener">zh.wikisource.org/wiki/周易</a></li>
       <li><b>苏轼《东坡易传》</b>　取自维基文库。前三十五卦和《系辞》的一部分有标点本；其余二十九卦和《系辞》《说卦》全文只有《四库全书》本，没有标点，页面上标了“无标点”。《蒙》卦的注相传出自苏辙。</li>
       <li><b>许可</b>　以上原文均属公有领域，标点与整理由维基文库贡献者完成，依 CC BY-SA 4.0 许可使用。</li>
-      <li><b>白话</b>　由 AI（Claude）撰写，参考历代通行解释，只取一种读法，不是定论。分批写成，带圆点的卦是已经写好的。</li>
+      <li><b>白话</b>　由 AI（Claude）撰写，参考历代通行解释，只取一种读法，不是定论。六十四卦和《系辞》等篇都已写全；《系辞》等篇里篇幅长的章节取其大意。</li>
       <li><b>南怀瑾、曾仕强</b>　两位先生的著作仍在版权期内，本站没有引用原文。各卦下的“转述”是 AI 凭对其著作和讲座的记忆写的几句大意，<b>没有逐条对照原书核实，可能不准确</b>，请勿当作原话引用。原书：南怀瑾《易经杂说》《易经系传别讲》，曾仕强《易经的奥秘》《易经的智慧》。</li>
       <li><b>简体文字</b>　由繁体经 OpenCC 自动转换，个别字可能与通行本不同。</li>
       <li><b>错卦、综卦、互卦</b>　由程序按爻画算出。</li>
@@ -158,6 +158,13 @@ details.cm>summary small{color:var(--soft);font-size:.8rem}
 </div>
 
 <script src="interp.js"></script>
+<script src="interp2.js"></script>
+<script src="interp3.js"></script>
+<script src="interp4.js"></script>
+<script src="interp5.js"></script>
+<script src="interp6.js"></script>
+<script src="interp7.js"></script>
+<script src="interp8.js"></script>
 <script>
 const IMG={"乾":"天","兑":"泽","离":"火","震":"雷","巽":"风","坎":"水","艮":"山","坤":"地"};
 const WING_KEYS=[["how","怎么读"],["xs","系辞上"],["xx","系辞下"],["sg","说卦"],["xg","序卦"],["zg","杂卦"]];
@@ -217,7 +224,7 @@ function renderWing(k){
     ${b.intro?`<div class="sum"><p>${esc(b.intro)}</p></div>`:""}
     <h3>原文</h3>
     <div>${w.ch.map((c,i)=>`<div class="chap"><span class="cn">${esc(c[0]||"")}</span><p class="orig">${esc(c[1])}</p>${b.ch&&b.ch[i]?`<p class="bh">${esc(b.ch[i])}</p>`:""}</div>`).join("")}</div>
-    ${b.ch?"":`<p class="todo">这一篇的逐章白话还没有写到。</p>`}
+    ${b.ch?(b.note?`<p class="todo">${esc(b.note)}</p>`:""):`<p class="todo">这一篇的逐章白话还没有写到。</p>`}
     ${(w.dp||w.dpk)?`<h3>各家解读</h3><div>
       ${w.dp?`<details class="cm"><summary><b>苏轼《东坡易传》</b><small>有标点的部分</small></summary><div class="cmt">${esc(w.dp)}</div></details>`:""}
       ${w.dpk?`<details class="cm"><summary><b>苏轼《东坡易传》</b><small>四库本全文</small><span class="tag">无标点</span></summary><div class="cmt raw">${esc(w.dpk)}</div></details>`:""}
@@ -271,7 +278,7 @@ fetch("data.json").then(r=>{if(!r.ok)throw 0;return r.json();}).then(d=>{
   });
   for(const k in d.wings){const w=d.wings[k];w.ch.forEach(c=>INDEX.push({id:k,where:w.t+(c[0]?" · "+c[0]:""),text:c[1]}));}
   const done=Object.keys(I).length;
-  document.getElementById("stat").textContent=`六十四卦原文与苏轼注已全；白话写到第 ${done} 卦`;
+  document.getElementById("stat").textContent=`六十四卦与《系辞》《说卦》《序卦》《杂卦》的原文、白话已全（${done} 卦）`;
   const h=location.hash.slice(1);
   go(/^(g\d+|how|xs|xx|sg|xg|zg)$/.test(h)?h:"g1",true);
 }).catch(()=>{document.getElementById("stat").textContent="数据没有载入成功，刷新页面再试一次。";});
