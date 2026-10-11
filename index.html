@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="周易六十四卦与系辞：原文、白话、苏轼《东坡易传》，以及南怀瑾、曾仕强讲法的转述。">
+<title>周易</title>
+<style>
+/* 布局：左边是六十四卦的方阵，右边是一卦的全部内容；爻画本身就是这页的图形 */
+:root{
+  --bg:#eef0ed;        /* 粉墙 */
+  --panel:#f7f8f6;     /* 纸 */
+  --ink:#1f2527;       /* 墨 */
+  --soft:#5d6a68;      /* 淡墨 */
+  --line:#c6cdc9;      /* 界线 */
+  --acc:#4b6a55;       /* 竹青 */
+  --mark:#9c3b2e;      /* 朱，只用在当前卦 */
+  --kai:"Kaiti SC","STKaiti","KaiTi","楷体",serif;
+  --song:"Songti SC","STSong","SimSun","Noto Serif CJK SC",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#14181a;--panel:#1a2022;--ink:#dfe4e1;--soft:#93a19d;--line:#33403d;--acc:#8fb79b;--mark:#e0705f;color-scheme:dark}
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--song);font-size:16px;line-height:1.85;padding-inline:20px;padding-block:24px 56px}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wrap{max-width:1180px;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
+.home{align-self:flex-start;font-size:.84rem;color:var(--soft);text-decoration:none;letter-spacing:.06em}
+.home:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px}
+h1{font-family:var(--kai);font-weight:400;font-size:clamp(2.4rem,6vw,3.4rem);line-height:1.1;margin:0;letter-spacing:.1em}
+.sub{margin:0;color:var(--soft);font-size:.95rem}
+.tools{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.tools .find{flex:1 1 260px;min-width:0;max-width:420px}
+input[type=search]{font:inherit;font-size:.92rem;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:6px 12px;width:100%;border-radius:0}
+input[type=search]::placeholder{color:var(--soft)}
+.stat{font-size:.82rem;color:var(--soft)}
+.qres{border:1px solid var(--line);background:var(--panel);padding:10px 14px;display:flex;flex-direction:column;gap:2px;max-height:320px;overflow-y:auto}
+.qres p{margin:0 0 4px;font-size:.82rem;color:var(--soft)}
+.qres button{text-align:left;padding:3px 0;font-size:.92rem;line-height:1.6;display:flex;gap:10px;justify-content:space-between;align-items:baseline}
+.qres button:hover .rt{text-decoration:underline}
+.qres .rs{flex:0 0 auto;font-size:.78rem;color:var(--soft)}
+
+.layout{display:grid;grid-template-columns:minmax(0,372px) minmax(0,1fr);gap:36px;align-items:start}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr);gap:24px}}
+.side{position:sticky;top:12px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:900px){.side{position:static}}
+.grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0 4px;border:1px solid transparent;line-height:1.2}
+.cell:hover{border-color:var(--line);background:var(--panel)}
+.cell[aria-current="true"]{border-color:var(--mark);background:var(--panel)}
+.cell[aria-current="true"] .nm{color:var(--mark)}
+.cell .nm{font-family:var(--kai);font-size:.86rem;white-space:nowrap}
+.cell.done .nm::after{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--acc);margin-left:2px;vertical-align:middle}
+svg.hx{display:block}
+svg.hx rect{fill:var(--ink)}
+.cell[aria-current="true"] svg.hx rect{fill:var(--mark)}
+.wings{display:flex;flex-wrap:wrap;gap:6px}
+.wings button{border:1px solid var(--line);padding:2px 12px;font-size:.9rem;line-height:1.7}
+.wings button:hover{border-color:var(--ink)}
+.wings button[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.legend{font-size:.78rem;color:var(--soft);margin:0}
+.legend i{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--acc);vertical-align:middle;margin-right:4px}
+
+main{min-width:0;display:flex;flex-direction:column;gap:22px}
+.head{display:flex;gap:22px;align-items:center}
+.head svg.hx{flex:0 0 auto}
+.head svg.hx rect{fill:var(--mark)}
+.head .no{font-size:.82rem;color:var(--soft);letter-spacing:.2em}
+.head h2{font-family:var(--kai);font-weight:400;font-size:3rem;line-height:1.1;margin:0}
+.head .full{color:var(--soft);font-size:.95rem;margin:2px 0 0}
+.nav{display:flex;gap:8px;margin-left:auto;align-self:flex-start}
+.nav button{border:1px solid var(--ink);padding:5px 14px;font-size:.9rem;line-height:1.5;white-space:nowrap}
+.nav button:hover:not(:disabled){background:var(--ink);color:var(--bg)}
+.nav button:disabled{opacity:.3;cursor:default}
+@media (max-width:560px){.head{flex-wrap:wrap}.nav{margin-left:0;width:100%}}
+h3{font-size:.8rem;font-weight:600;letter-spacing:.3em;color:var(--soft);margin:0;padding-top:14px;border-top:1px solid var(--line)}
+.orig{font-family:var(--kai);font-size:1.32rem;line-height:1.75;margin:0}
+.bh{margin:6px 0 0;max-width:36em}
+.todo{margin:6px 0 0;font-size:.86rem;color:var(--soft)}
+.blk{display:flex;flex-direction:column;gap:2px}
+.blk .lab{font-size:.8rem;color:var(--acc);letter-spacing:.15em}
+.yaos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.yaos li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.yaos li:last-child{border-bottom:0}
+.yl{display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:6px}
+.yl span{font-size:.8rem;color:var(--acc);white-space:nowrap}
+.yl svg rect{fill:var(--ink)}
+.xx{margin:2px 0 0;font-size:.92rem;color:var(--soft)}
+.sum{background:var(--panel);border:1px solid var(--line);padding:16px 20px}
+.sum p{margin:0;max-width:36em}
+.rel{display:flex;flex-wrap:wrap;gap:10px}
+.rel button{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:8px 14px;text-align:left;line-height:1.4}
+.rel button:hover{border-color:var(--ink)}
+.rel small{display:block;font-size:.76rem;color:var(--soft)}
+.rel b{font-family:var(--kai);font-weight:400;font-size:1.15rem}
+details.cm{border-bottom:1px solid var(--line)}
+details.cm>summary{cursor:pointer;padding:10px 0;list-style:none;display:flex;gap:10px;align-items:baseline}
+details.cm>summary::-webkit-details-marker{display:none}
+details.cm>summary::before{content:"＋";color:var(--soft);font-size:.8rem}
+details.cm[open]>summary::before{content:"－"}
+details.cm>summary b{font-weight:600}
+details.cm>summary small{color:var(--soft);font-size:.8rem}
+.cmt{padding:0 0 16px 1.6em;white-space:pre-line;max-width:38em}
+.cmt.raw{font-size:.95rem;color:var(--soft)}
+.tag{font-size:.72rem;color:var(--soft);border:1px solid var(--line);padding:0 5px;white-space:nowrap}
+.warn{font-size:.84rem;color:var(--soft);margin:0 0 8px;padding-left:1.9em;max-width:40em}
+.chap{display:flex;flex-direction:column;gap:4px;padding:14px 0;border-bottom:1px solid var(--line)}
+.chap .cn{font-size:.8rem;color:var(--acc);letter-spacing:.15em}
+.chap .orig{font-size:1.2rem;white-space:pre-line}
+.how dt{font-weight:600;margin-top:14px}
+.how dd{margin:2px 0 0;max-width:38em}
+.src{border-top:1px solid var(--line);padding-top:18px;margin-top:20px;font-size:.84rem;color:var(--soft);line-height:1.8}
+.src h3{border:0;padding:0;margin:0 0 8px}
+.src ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;max-width:60em}
+.src b{color:var(--ink);font-weight:600}
+.src a{color:inherit;text-underline-offset:3px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../">← 渊默的学习小院</a>
+  <header>
+    <h1>周易</h1>
+    <p class="sub">六十四卦与十翼。原文、白话，苏轼《东坡易传》，南怀瑾与曾仕强讲法的转述。</p>
+  </header>
+
+  <div class="tools">
+    <div class="find"><input type="search" id="q" placeholder="找一句话或一个字：如“自强不息”“无咎”“潜龙”" aria-label="搜索全文"></div>
+    <span class="stat" id="stat">正在载入…</span>
+  </div>
+  <div class="qres" id="qres" hidden></div>
+
+  <div class="layout">
+    <nav class="side" aria-label="目录">
+      <div class="grid" id="grid"></div>
+      <p class="legend"><i></i>带圆点的卦已有白话和两家转述，其余暂时只有原文和苏轼的注。</p>
+      <div class="wings" id="wings"></div>
+    </nav>
+    <main id="main" aria-live="polite"></main>
+  </div>
+
+  <footer class="src">
+    <h3>来源与说明</h3>
+    <ul>
+      <li><b>经传原文</b>　取自维基文库《周易》各卦页面与《易传》各篇。<a href="https://zh.wikisource.org/wiki/周易" target="_blank" rel="noopener">zh.wikisource.org/wiki/周易</a></li>
+      <li><b>苏轼《东坡易传》</b>　取自维基文库。前三十五卦和《系辞》的一部分有标点本；其余二十九卦和《系辞》《说卦》全文只有《四库全书》本，没有标点，页面上标了“无标点”。《蒙》卦的注相传出自苏辙。</li>
+      <li><b>许可</b>　以上原文均属公有领域，标点与整理由维基文库贡献者完成，依 CC BY-SA 4.0 许可使用。</li>
+      <li><b>白话</b>　由 AI（Claude）撰写，参考历代通行解释，只取一种读法，不是定论。分批写成，带圆点的卦是已经写好的。</li>
+      <li><b>南怀瑾、曾仕强</b>　两位先生的著作仍在版权期内，本站没有引用原文。各卦下的“转述”是 AI 凭对其著作和讲座的记忆写的几句大意，<b>没有逐条对照原书核实，可能不准确</b>，请勿当作原话引用。原书：南怀瑾《易经杂说》《易经系传别讲》，曾仕强《易经的奥秘》《易经的智慧》。</li>
+      <li><b>简体文字</b>　由繁体经 OpenCC 自动转换，个别字可能与通行本不同。</li>
+      <li><b>错卦、综卦、互卦</b>　由程序按爻画算出。</li>
+    </ul>
+  </footer>
+</div>
+
+<script src="interp.js"></script>
+<script>
+const IMG={"乾":"天","兑":"泽","离":"火","震":"雷","巽":"风","坎":"水","艮":"山","坤":"地"};
+const WING_KEYS=[["how","怎么读"],["xs","系辞上"],["xx","系辞下"],["sg","说卦"],["xg","序卦"],["zg","杂卦"]];
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const I=window.INTERP||{},WB=window.WINGS_BH||{},HOW=window.HOWTO||[];
+let D=null,cur="g1",INDEX=[];
+const grid=document.getElementById("grid"),wings=document.getElementById("wings"),main=document.getElementById("main");
+
+/* 画一个卦：lines 是自下而上的六位 0/1 */
+function hx(lines,w,h,gap){
+  const n=lines.length,bar=(h-gap*(n-1))/n;let s="";
+  for(let i=0;i<n;i++){
+    const y=(n-1-i)*(bar+gap);
+    if(lines[i]==="1")s+=`<rect x="0" y="${y.toFixed(1)}" width="${w}" height="${bar.toFixed(1)}"/>`;
+    else{const seg=w*0.42;s+=`<rect x="0" y="${y.toFixed(1)}" width="${seg.toFixed(1)}" height="${bar.toFixed(1)}"/><rect x="${(w-seg).toFixed(1)}" y="${y.toFixed(1)}" width="${seg.toFixed(1)}" height="${bar.toFixed(1)}"/>`;}
+  }
+  return `<svg class="hx" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${s}</svg>`;
+}
+const fullName=g=>g.lo===g.up?`${g.name}为${IMG[g.up]}`:`${IMG[g.up]}${IMG[g.lo]}${g.name}`;
+const G=n=>D.gua[n-1];
+
+function renderGua(n){
+  const g=G(n),t=I[n];
+  const bh=(s)=>s?`<p class="bh">${esc(s)}</p>`:"";
+  const yaos=g.yao.map((y,i)=>{
+    const lineChar=i<6?g.lines[i]:null;
+    return `<li><div class="yl">${lineChar!==null?hx(lineChar,36,7,0):""}<span>${esc(y[0])}</span></div><div>
+      <p class="orig">${esc(y[1])}</p><p class="xx">象曰：${esc(g.xx[i]||"")}</p>${t?bh(t.yao[i]):""}</div></li>`;}).join("");
+  const rel=[["错卦","六爻阴阳全反",g.cuo],["综卦","上下颠倒",g.zong],["互卦","取中间四爻",g.hu]].map(r=>{
+    const x=G(r[2]);return `<button type="button" data-go="g${x.n}">${hx(x.lines,26,26,2.4)}<span><small>${r[0]} · ${r[1]}</small><b>${esc(x.name)}</b></span></button>`;}).join("");
+  main.innerHTML=`
+    <div class="head">${hx(g.lines,84,92,7)}
+      <div><div class="no">第 ${g.n} 卦</div><h2>${esc(g.name)}</h2><p class="full">${esc(fullName(g))} · ${esc(g.lo)}下${esc(g.up)}上</p></div>
+      <div class="nav"><button type="button" data-go="g${n-1}" ${n===1?"disabled":""}>上一卦</button><button type="button" data-go="g${n+1}" ${n===64?"disabled":""}>下一卦</button></div>
+    </div>
+    ${t?`<div class="sum"><p>${esc(t.sum)}</p></div>`:`<p class="todo">这一卦的白话和两家转述还没有写到，下面先是原文和苏轼的注。</p>`}
+    <h3>卦辞</h3>
+    <div class="blk"><p class="orig">${esc(g.name)}：${esc(g.ci)}</p>${t?bh(t.ci):""}</div>
+    <div class="blk"><span class="lab">彖曰</span><p class="orig">${esc(g.tuan)}</p>${t?bh(t.tuan):""}</div>
+    <div class="blk"><span class="lab">象曰</span><p class="orig">${esc(g.dx)}</p>${t?bh(t.dx):""}</div>
+    <h3>爻辞</h3>
+    <ul class="yaos">${yaos}</ul>
+    ${g.wy?`<details class="cm"><summary><b>文言传</b><small>专门解说${esc(g.name)}卦的一篇</small></summary><div class="cmt">${esc(g.wy)}</div></details>`:""}
+    <h3>相关的卦</h3>
+    <div class="rel">${rel}</div>
+    <h3>各家解读</h3>
+    <div>
+      <details class="cm"${t?"":" open"}><summary><b>苏轼《东坡易传》</b><small>北宋 · 全文${g.dpr?" · ":""}</small>${g.dpr?`<span class="tag">无标点</span>`:""}</summary><div class="cmt${g.dpr?" raw":""}">${esc(g.dp||"这一卦的注没有取到。")}</div></details>
+      ${t?`<details class="cm" open><summary><b>南怀瑾</b><small>转述，非原文</small></summary><p class="warn">凭记忆转述其讲法的大意，没有对照原书核实。</p><div class="cmt">${esc(t.nan)}</div></details>
+      <details class="cm" open><summary><b>曾仕强</b><small>转述，非原文</small></summary><p class="warn">凭记忆转述其讲法的大意，没有对照原书核实。</p><div class="cmt">${esc(t.zeng)}</div></details>`:""}
+    </div>`;
+}
+function renderWing(k){
+  const w=D.wings[k],b=WB[k]||{};
+  main.innerHTML=`
+    <div class="head"><div><div class="no">十翼</div><h2>${esc(w.t)}</h2></div></div>
+    ${b.intro?`<div class="sum"><p>${esc(b.intro)}</p></div>`:""}
+    <h3>原文</h3>
+    <div>${w.ch.map((c,i)=>`<div class="chap"><span class="cn">${esc(c[0]||"")}</span><p class="orig">${esc(c[1])}</p>${b.ch&&b.ch[i]?`<p class="bh">${esc(b.ch[i])}</p>`:""}</div>`).join("")}</div>
+    ${b.ch?"":`<p class="todo">这一篇的逐章白话还没有写到。</p>`}
+    ${(w.dp||w.dpk)?`<h3>各家解读</h3><div>
+      ${w.dp?`<details class="cm"><summary><b>苏轼《东坡易传》</b><small>有标点的部分</small></summary><div class="cmt">${esc(w.dp)}</div></details>`:""}
+      ${w.dpk?`<details class="cm"><summary><b>苏轼《东坡易传》</b><small>四库本全文</small><span class="tag">无标点</span></summary><div class="cmt raw">${esc(w.dpk)}</div></details>`:""}
+    </div>`:""}`;
+}
+function renderHow(){
+  main.innerHTML=`<div class="head"><div><div class="no">开始之前</div><h2>怎么读</h2></div></div>
+    <dl class="how">${HOW.map(x=>`<dt>${esc(x[0])}</dt><dd>${esc(x[1])}</dd>`).join("")}</dl>`;
+}
+function go(id,keepScroll){
+  if(!D)return;
+  const m=/^g(\d+)$/.exec(id);
+  if(m){const n=+m[1];if(n<1||n>64)return;cur=id;renderGua(n);}
+  else if(id==="how"){cur=id;renderHow();}
+  else if(D.wings[id]){cur=id;renderWing(id);}
+  else return;
+  [...grid.children].forEach((b,i)=>b.setAttribute("aria-current",cur==="g"+(i+1)?"true":"false"));
+  [...wings.children].forEach(b=>b.setAttribute("aria-current",b.dataset.go===cur?"true":"false"));
+  try{history.replaceState(null,"","#"+cur);}catch(e){}
+  if(!keepScroll&&window.matchMedia("(max-width:900px)").matches)main.scrollIntoView({block:"start"});
+}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b&&!b.disabled)go(b.dataset.go);});
+document.addEventListener("keydown",e=>{
+  if(e.target.closest("input,textarea,summary"))return;
+  const m=/^g(\d+)$/.exec(cur);if(!m)return;
+  if(e.key==="ArrowRight")go("g"+(+m[1]+1));
+  if(e.key==="ArrowLeft")go("g"+(+m[1]-1));
+});
+
+/* 搜索 */
+const q=document.getElementById("q"),qres=document.getElementById("qres");
+q.addEventListener("input",()=>{
+  const s=q.value.trim();
+  if(!s||!D){qres.hidden=true;return;}
+  const hits=INDEX.filter(x=>x.text.includes(s));
+  qres.hidden=false;
+  qres.innerHTML=`<p>${hits.length?`找到 ${hits.length} 处${hits.length>60?"，先列出前 60 处":""}`:"没有找到。原文由繁体转换而来，个别字可能和通行本不同，换个词试试。"}</p>`+
+    hits.slice(0,60).map(x=>{const i=x.text.indexOf(s);const ctx=x.text.slice(Math.max(0,i-10),i+s.length+16).replace(/\n/g," ");
+      return `<button type="button" data-go="${x.id}"><span class="rt">${esc(ctx)}</span><span class="rs">${esc(x.where)}</span></button>`;}).join("");
+});
+
+fetch("data.json").then(r=>{if(!r.ok)throw 0;return r.json();}).then(d=>{
+  D=d;
+  grid.innerHTML=d.gua.map(g=>`<button type="button" class="cell${I[g.n]?" done":""}" data-go="g${g.n}" title="第${g.n}卦 ${esc(fullName(g))}">${hx(g.lines,22,22,2)}<span class="nm">${esc(g.name)}</span></button>`).join("");
+  wings.innerHTML=WING_KEYS.map(k=>`<button type="button" data-go="${k[0]}">${k[1]}</button>`).join("");
+  d.gua.forEach(g=>{
+    const t=I[g.n],w=`第${g.n}卦 ${g.name}`;
+    INDEX.push({id:"g"+g.n,where:w+" · 原文",text:[g.name+"："+g.ci,g.tuan,g.dx,...g.yao.map(y=>y[0]+"："+y[1]),...g.xx,g.wy].join("\n")});
+    if(t)INDEX.push({id:"g"+g.n,where:w+" · 白话与转述",text:[t.sum,t.ci,t.tuan,t.dx,...t.yao,t.nan,t.zeng].join("\n")});
+    if(g.dp)INDEX.push({id:"g"+g.n,where:w+" · 东坡易传",text:g.dp});
+  });
+  for(const k in d.wings){const w=d.wings[k];w.ch.forEach(c=>INDEX.push({id:k,where:w.t+(c[0]?" · "+c[0]:""),text:c[1]}));}
+  const done=Object.keys(I).length;
+  document.getElementById("stat").textContent=`六十四卦原文与苏轼注已全；白话写到第 ${done} 卦`;
+  const h=location.hash.slice(1);
+  go(/^(g\d+|how|xs|xx|sg|xg|zg)$/.test(h)?h:"g1",true);
+}).catch(()=>{document.getElementById("stat").textContent="数据没有载入成功，刷新页面再试一次。";});
+</script>
+</body>
+</html>
