@@ -247,6 +247,7 @@ function go(id,keepScroll){
   if(!keepScroll&&window.matchMedia("(max-width:900px)").matches)main.scrollIntoView({block:"start"});
 }
 document.addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b&&!b.disabled)go(b.dataset.go);});
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(h!==cur)go(h);});
 document.addEventListener("keydown",e=>{
   if(e.target.closest("input,textarea,summary"))return;
   const m=/^g(\d+)$/.exec(cur);if(!m)return;
@@ -276,7 +277,7 @@ fetch("data.json").then(r=>{if(!r.ok)throw 0;return r.json();}).then(d=>{
     if(t)INDEX.push({id:"g"+g.n,where:w+" · 白话与转述",text:[t.sum,t.ci,t.tuan,t.dx,...t.yao,t.nan,t.zeng].join("\n")});
     if(g.dp)INDEX.push({id:"g"+g.n,where:w+" · 东坡易传",text:g.dp});
   });
-  for(const k in d.wings){const w=d.wings[k];w.ch.forEach(c=>INDEX.push({id:k,where:w.t+(c[0]?" · "+c[0]:""),text:c[1]}));}
+  for(const k in d.wings){const w=d.wings[k];w.ch.forEach((c,i)=>{INDEX.push({id:k,where:w.t+(c[0]?" · "+c[0]:""),text:c[1]});const bh=(WB[k]||{}).ch;if(bh&&bh[i])INDEX.push({id:k,where:w.t+(c[0]?" · "+c[0]:"")+" · 白话",text:bh[i]});});}
   const done=Object.keys(I).length;
   document.getElementById("stat").textContent=`六十四卦与《系辞》《说卦》《序卦》《杂卦》的原文、白话已全（${done} 卦）`;
   const h=location.hash.slice(1);
